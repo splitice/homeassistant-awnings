@@ -3,10 +3,25 @@ triggers:
   - trigger: homeassistant
     event: start
 actions:
+  - wait_for_trigger:
+      - trigger: mqtt
+        topic: ha/state/awning_controller_supervisor
+    timeout:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+    continue_on_timeout: true
   - variables:
-      state_map_helper: input_text.awning_state_map
+      state_map_topic: ha/state/awning_controller_supervisor
+      state_map_payload: >
+        {% if wait.trigger is defined and wait.trigger is not none and wait.trigger.payload is string %}
+          {{ wait.trigger.payload }}
+        {% else %}
+          {{ '' }}
+        {% endif %}
       state_map: >
-        {% set raw = states(state_map_helper) %}
+        {% set raw = state_map_payload %}
         {% if raw in ['unknown', 'unavailable', ''] %}
           {{ dict() }}
         {% elif raw.startswith('{') and raw.endswith('}') %}
@@ -375,14 +390,12 @@ actions:
             - conditions:
                 - condition: template
                   value_template: "{{ state_map_changed }}"
-                - condition: template
-                  value_template: "{{ states(state_map_helper) not in ['unknown', 'unavailable'] }}"
               sequence:
-                - action: input_text.set_value
-                  target:
-                    entity_id: "{{ state_map_helper }}"
+                - action: mqtt.publish
                   data:
-                    value: "{{ state_map_json_current }}"
+                    topic: "{{ state_map_topic }}"
+                    payload: "{{ state_map_json_current }}"
+                    retain: true
         - variables:
             state_map_json_previous: "{{ state_map_json_current }}"
         - choose:

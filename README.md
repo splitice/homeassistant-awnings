@@ -20,19 +20,17 @@ The supervisor automation:
 - Opens non-bedroom awnings in morning conditions
 - Detects manual overrides and temporarily suppresses automatic control for those awnings
 
-## Persisted state map helper
+## Persisted state map topic
 
-The supervisor persists its internal `state_map` as JSON in:
+The supervisor persists its internal `state_map` as retained JSON in MQTT topic:
 
-- `input_text.awning_state_map`
+- `ha/state/awning_controller_supervisor`
 
-This helper is used to restore state across automation restarts/reloads.
+This retained topic is used to restore state across automation restarts/reloads.
 
-Create the helper in Home Assistant if it does not exist:
+Requirements:
 
-1. **Settings → Devices & Services → Helpers → Create Helper**
-2. Choose **Text**
-3. Entity ID: `input_text.awning_state_map`
-4. Set max length high enough to hold JSON for your awnings (for example `16384`), then monitor the helper state value length in Developer Tools and increase the limit if the stored JSON gets close to the configured maximum
+1. Home Assistant MQTT integration configured and connected to your broker.
+2. Broker allows publish/subscribe for topic `ha/state/awning_controller_supervisor`.
 
-If the helper is unavailable, the automation continues to run but state persistence is skipped until the helper exists.
+If no retained payload exists yet, the automation starts with an empty state map and publishes retained state once it changes.
