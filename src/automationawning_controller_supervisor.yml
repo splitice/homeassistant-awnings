@@ -7,7 +7,7 @@ actions:
       state_map_helper: input_text.awning_state_map
       state_map: >
         {% set raw = states(state_map_helper) %}
-        {% if raw in ['unknown', 'unavailable', 'none', 'None', ''] %}
+        {% if raw in ['unknown', 'unavailable', ''] %}
           {{ dict() }}
         {% else %}
           {{ raw | from_json({}) }}
@@ -198,7 +198,6 @@ actions:
                   {% set auto_match = expected_state is not none and expected_day == today and (auto_open_match or auto_close_match) %}
 
                   {% if not auto_match %}
-                    {% set pos = nowv.get('pos') %}
                     {% set is_closed =
                       nowv.get('state') in ['closed', 'closing']
                       or (pos is number and pos | int(0) == 0) %}

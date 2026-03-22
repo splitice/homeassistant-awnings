@@ -2,7 +2,7 @@
 
 This repository contains Home Assistant YAML automations for awning control:
 
-- `automationawning_controller_supervisor.yml`: main 1-minute supervisor loop
+- `automationawning_controller_supervisor.yml` (entity `automation.awning_controller_supervisor`): main 1-minute supervisor loop
 - `automation.awning_ensure_supervisor_is_running.yml`: watchdog that restarts the supervisor if it stops
 - `automation.awning_bedroom_backlight_schedule.yml`: bedroom awning backlight schedule
 
@@ -33,6 +33,6 @@ Create the helper in Home Assistant if it does not exist:
 1. **Settings → Devices & Services → Helpers → Create Helper**
 2. Choose **Text**
 3. Entity ID: `input_text.awning_state_map`
-4. Set max length high enough to hold JSON for your awnings (for example `8192`)
+4. Set max length high enough to hold JSON for your awnings (for example `16384`, then adjust based on real value length in the helper state)
 
 If the helper is unavailable, the automation continues to run but state persistence is skipped until the helper exists.
