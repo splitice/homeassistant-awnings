@@ -7,16 +7,13 @@ actions:
       - trigger: mqtt
         topic: ha/state/awning_controller_supervisor
     timeout:
-      hours: 0
-      minutes: 0
       seconds: 5
-      milliseconds: 0
     continue_on_timeout: true
   - variables:
       state_map_topic: ha/state/awning_controller_supervisor
       state_map_payload: >
-        {% if wait.trigger is defined and wait.trigger is not none and wait.trigger.payload is string %}
-          {{ wait.trigger.payload }}
+        {% if wait.trigger is defined and wait.trigger is not none and wait.trigger.payload is defined %}
+          {{ wait.trigger.payload | string }}
         {% else %}
           {{ '' }}
         {% endif %}
