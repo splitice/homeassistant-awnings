@@ -195,14 +195,15 @@ actions:
                   {% set expected_state = st.get('last_auto_state') %}
                   {% set expected_day = st.get('last_auto_day') %}
                   {% set pos = nowv.get('pos') %}
-                  {% set auto_open_match = expected_state == 'opening' and (nowv.get('state') in ['open', 'opening'] or (pos is number and pos | int(0) > 0)) %}
-                  {% set auto_close_match = expected_state == 'closing' and (nowv.get('state') in ['closed', 'closing'] or (pos is number and pos | int(0) == 0)) %}
+                  {% set pos_int = pos | int(0) %}
+                  {% set auto_open_match = expected_state == 'opening' and (nowv.get('state') in ['open', 'opening'] or (pos is number and pos_int > 0)) %}
+                  {% set auto_close_match = expected_state == 'closing' and (nowv.get('state') in ['closed', 'closing'] or (pos is number and pos_int == 0)) %}
                   {% set auto_match = expected_state is not none and expected_day == today and (auto_open_match or auto_close_match) %}
 
                   {% if not auto_match %}
                     {% set is_closed =
                       nowv.get('state') in ['closed', 'closing']
-                      or (pos is number and pos | int(0) == 0) %}
+                      or (pos is number and pos_int == 0) %}
 
                     {% set merged = st | combine({
                       'manual_override': true,
