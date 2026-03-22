@@ -9,8 +9,10 @@ actions:
         {% set raw = states(state_map_helper) %}
         {% if raw in ['unknown', 'unavailable', ''] %}
           {{ dict() }}
+        {% elif raw.startswith('{') and raw.endswith('}') %}
+          {{ raw | from_json }}
         {% else %}
-          {{ raw | from_json({}) }}
+          {{ dict() }}
         {% endif %}
       state_map_json_previous: "{{ state_map | to_json }}"
       prev_snapshot: {}
