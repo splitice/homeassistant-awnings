@@ -25,6 +25,7 @@ actions:
         - variables:
             loop_count: "{{ loop_count + 1 }}"
             now_mins: "{{ now().hour * 60 + now().minute }}"
+            afternoon_start_mins: "{{ 12 * 60 }}"
             awnings_all: |
               {% set ns = namespace(entities=[]) %}
               {% for dev in label_devices('awning') %}
@@ -134,7 +135,7 @@ actions:
               {% set ns = namespace(out=[]) %} {% for awning in awnings_bedroom
               %}
                 {% set is_exposed = awning in exposed_awnings %}
-                {% if now_mins >= 12 * 60 and (not is_exposed or sun_el <= min_el) %}
+                {% if now_mins >= afternoon_start_mins and (not is_exposed or sun_el <= min_el) %}
                   {% set ns.out = ns.out + [awning] %}
                 {% endif %}
               {% endfor %} {{ ns.out }}
