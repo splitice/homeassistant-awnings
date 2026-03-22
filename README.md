@@ -16,7 +16,7 @@ The supervisor automation:
   - `input_number.awning_exposure_half_band`
 - Closes exposed hot-day awnings when `binary_sensor.awning_hot_day` is `on`
 - Opens bedroom awnings to position `11` during each awning's `bedroom_wakeup_HHMM` label window (first 20 minutes after configured wake time)
-- Closes bedroom awnings when not exposed or sun elevation is below minimum
+- Closes bedroom awnings in afternoon/evening only (from 12:00 onward) when not exposed or sun elevation is below minimum
 - Opens non-bedroom awnings in morning conditions
 - Detects manual overrides and temporarily suppresses automatic control for those awnings
 
