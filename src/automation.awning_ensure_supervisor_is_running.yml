@@ -1,0 +1,24 @@
+alias: "Awning: Ensure supervisor is running"
+description: ""
+triggers:
+  - trigger: time_pattern
+    minutes: /5
+conditions:
+  - condition: state
+    entity_id: automation.awning_controller_supervisor
+    state:
+      - "\"0\""
+    attribute: current
+actions:
+  - action: automation.turn_on
+    metadata: {}
+    target:
+      entity_id: automation.awning_controller_supervisor
+    data: {}
+  - action: automation.trigger
+    metadata: {}
+    target:
+      entity_id: automation.awning_controller_supervisor
+    data:
+      skip_condition: true
+mode: single

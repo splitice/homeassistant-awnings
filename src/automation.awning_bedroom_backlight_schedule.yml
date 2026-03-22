@@ -1,0 +1,44 @@
+alias: "Awning: Bedroom Backlight Schedule"
+description: ""
+triggers:
+  - at: "22:00:00"
+    id: night
+    trigger: time
+  - at: "08:00:00"
+    id: morning
+    trigger: time
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: night
+        sequence:
+          - target:
+              entity_id: |
+                {% set ns = namespace(entities=[]) %}
+                {% for dev in label_devices('awning_bedroom') %}
+                  {% for ent in device_entities(dev) %}
+                    {% if ent.endswith('_backlight_switch') %}
+                      {% set ns.entities = ns.entities + [ent] %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+                {{ ns.entities }}
+            action: switch.turn_off
+      - conditions:
+          - condition: trigger
+            id: morning
+        sequence:
+          - target:
+              entity_id: |
+                {% set ns = namespace(entities=[]) %}
+                {% for dev in label_devices('awning_bedroom') %}
+                  {% for ent in device_entities(dev) %}
+                    {% if ent.endswith('_backlight_switch') %}
+                      {% set ns.entities = ns.entities + [ent] %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+                {{ ns.entities }}
+            action: switch.turn_on
+mode: single
