@@ -161,7 +161,7 @@ actions:
                   {% set ns.out = ns.out + [awning] %}
                 {% endif %}
               {% endfor %} {{ ns.out | unique | list }}
-            bedroom_close_now_targets: |
+            bedroom_close_targets_excluding_wakeup: |
               {{ bedroom_close_targets | reject('in', bedroom_wakeup_targets) | list }}
             morning_open_targets: |
               {% set ns = namespace(out=[]) %} {% for awning in awnings_all %}
@@ -310,16 +310,16 @@ actions:
         - choose:
             - conditions:
                 - condition: template
-                  value_template: "{{ bedroom_close_now_targets | count > 0 }}"
+                  value_template: "{{ bedroom_close_targets_excluding_wakeup | count > 0 }}"
               sequence:
                 - action: script.awning_close_targets
                   data:
-                    targets: "{{ bedroom_close_now_targets }}"
+                    targets: "{{ bedroom_close_targets_excluding_wakeup }}"
                     state_map: "{{ state_map }}"
                 - variables:
                     state_map: >
                       {% set cur = state_map %} {% set ns = namespace(out=cur)
-                      %} {% for awning in bedroom_close_now_targets %}
+                      %} {% for awning in bedroom_close_targets_excluding_wakeup %}
                         {% set st = cur.get(awning, {}) %}
                         {% set merged = st | combine({
                           'last_auto_state': 'closing',

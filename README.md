@@ -33,6 +33,6 @@ Create the helper in Home Assistant if it does not exist:
 1. **Settings → Devices & Services → Helpers → Create Helper**
 2. Choose **Text**
 3. Entity ID: `input_text.awning_state_map`
-4. Set max length high enough to hold JSON for your awnings (for example `16384`, then adjust based on real value length in the helper state)
+4. Set max length high enough to hold JSON for your awnings (for example `16384`), then monitor the stored JSON length in the helper state after setup and increase the limit if needed
 
 If the helper is unavailable, the automation continues to run but state persistence is skipped until the helper exists.
