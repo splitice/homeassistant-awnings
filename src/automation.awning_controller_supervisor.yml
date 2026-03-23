@@ -7,13 +7,11 @@ actions:
       state_map_topic: ha/state/awning_controller_supervisor
       state_map_payload: "{{ states('sensor.awning_state_awning_state') }}"
       state_map: >
-        {% set raw = state_map_payload %}
-        {% if raw in ['unknown', 'unavailable', ''] %}
+        {% set raw = state_map_payload %} {% if raw in ['unknown',
+        'unavailable', ''] %}
           {{ dict() }}
-        {% elif raw.startswith('{') and raw.endswith('}') %}
-          {{ raw | from_json }}
         {% else %}
-          {{ dict() }}
+          {{ raw }}
         {% endif %}
       state_map_json_previous: "{{ state_map | to_json }}"
       prev_snapshot: {}
