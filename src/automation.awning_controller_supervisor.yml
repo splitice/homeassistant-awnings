@@ -136,7 +136,7 @@ actions:
               {% set ns = namespace(out=[]) %} {% for awning in awnings_bedroom
               %}
                 {% set is_exposed = awning in exposed_awnings %}
-                {% if now_mins >= afternoon_start_mins and (not is_exposed or sun_el <= min_el) %}
+                {% if now_mins >= afternoon_start_mins and sun_el <= min_el %}
                   {% set ns.out = ns.out + [awning] %}
                 {% endif %}
               {% endfor %} {{ ns.out }}
@@ -219,8 +219,7 @@ actions:
                 {% endif %}
               {% endfor %}
               {{ ns.out }}
-            clear_mins:
-              "[object Object]": null
+            clear_mins: 20
         - variables:
             state_map: |
               {% set cur = state_map %} {% set ns = namespace(out=cur) %}
