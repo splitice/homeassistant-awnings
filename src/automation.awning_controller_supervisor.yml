@@ -3,20 +3,9 @@ triggers:
   - trigger: homeassistant
     event: start
 actions:
-  - wait_for_trigger:
-      - trigger: mqtt
-        topic: ha/state/awning_controller_supervisor
-    timeout:
-      seconds: 5
-    continue_on_timeout: true
   - variables:
       state_map_topic: ha/state/awning_controller_supervisor
-      state_map_payload: >
-        {% if wait.trigger is defined and wait.trigger is not none and wait.trigger.payload is defined %}
-          {{ wait.trigger.payload | string }}
-        {% else %}
-          {{ '' }}
-        {% endif %}
+      state_map_payload: "{{ states('sensor.awning_state_awning_state') }}"
       state_map: >
         {% set raw = state_map_payload %}
         {% if raw in ['unknown', 'unavailable', ''] %}
